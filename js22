@@ -1,0 +1,182 @@
+
+
+console.log("\n--- Task 1.1: map vs forEach vs reduce ---");
+
+const numbers = [3, 3, 3,3];
+
+
+const mapped = numbers.map((num, i) => {
+  console.log("map → index:", i, "value:", num);
+  return num * 5;
+});
+console.log("map result:", mapped);
+const forEachResult = [];
+numbers.forEach((num, i) => {
+  console.log("forEach → index:", i, "value:", num);
+  forEachResult.push(num * 2);
+});
+console.log("forEach result:", forEachResult);
+const reduced = numbers.reduce((acc, num, i) => {
+  console.log("reduce → acc:", acc, "current:", num, "index:", i);
+  acc.push(num * 4);
+  return acc;
+}, []);
+console.log("reduce result:", reduced);
+console.log("\n--- Task 1.2: filter + reduce ---");
+
+const prices = [500, 900, 200, 56, 300];
+let filtered = prices.filter(p => p > 500);
+let total = filtered.reduce((sum, p) => sum + p, 0);
+console.log("Condition >900:", filtered, "Total:", total);
+filtered = prices.filter(p => p < 200);
+total = filtered.reduce((sum, p) => sum + p, 0);
+console.log("Condition <200:", filtered, "Total:", total);
+
+
+console.log("\n--- Task 1.3: Custom map ---");
+
+function customMap(arr, callback) {
+  const result = [];
+  for (let i = 0; i < arr.length; i++) {
+    console.log("callback executed for:", arr[i]);
+    result.push(callback(arr[i], i, arr));
+  }
+  return result;
+}
+
+const customResult = customMap(numbers, n => n + 1);
+console.log("customMap result:", customResult);
+console.log("real map result:", numbers.map(n => n + 1));
+
+
+console.log("\n--- Task 2.1: Hoisting Reality Check ---");
+
+try {
+  console.log(a);
+} catch (e) {
+  console.log("Error accessing let before declaration");
+}
+var b = 20;
+let a = 10;
+
+hoistedFunc();
+function hoistedFunc() {
+  console.log("Function declaration hoisted");
+}
+
+try {
+  notHoisted();
+} catch (e) {
+  console.log("Function expression not hoisted");
+}
+const notHoisted = function () {
+  console.log("Won't run");
+};
+
+
+console.log("\n--- Task 2.2: Call Stack ---");
+
+function first() {
+  console.log("Enter first");
+  second();
+  console.log("Exit first");
+}
+
+function second() {
+  console.log("Enter second");
+  third();
+  console.log("Exit second");
+}
+
+function third() {
+  console.log("Inside third");
+}
+
+first();
+
+setTimeout(() => {
+  console.log("Async timeout executed");
+}, 0);
+
+
+console.log("\n--- Task 2.3: Closure ---");
+
+function counter() {
+  let count = 0;
+  return function () {
+    count++;
+    console.log("count:", count);
+  };
+}
+
+const myCounter = counter();
+myCounter();
+myCounter();
+
+console.log("\n--- Task 3.1: Destructuring Defaults ---");
+
+const user = {
+  name: "Ali",
+  age: 22
+};
+
+const { name, age, city = "Not Provided" } = user;
+console.log(name, age, city);
+
+console.log("\n--- Task 3.2: Rest Operator ---");
+
+function calculateAverage(...nums) {
+  const total = nums.reduce((a, b) => a + b, 0);
+  return total / nums.length;
+}
+
+console.log(calculateAverage(10, 20));
+console.log(calculateAverage(5, 10, 15, 20));
+
+
+console.log("\n--- Task 3.3: Spread vs Reference ---");
+
+const original = {
+  name: "Laptop",
+  specs: { ram: "8GB" }
+};
+
+const referenceCopy = original;
+const shallowCopy = { ...original };
+
+referenceCopy.specs.ram = "16GB";
+console.log("original after reference change:", original);
+
+shallowCopy.specs.ram = "32GB";
+console.log("original after shallow change:", original);
+
+
+console.log("\n--- Final Project ---");
+
+const employees = [
+  { name: "Ayan", salary: 50000, active: true },
+  { name: "Sara", salary: 70000, active: false },
+  { name: "Zain", salary: 60000, active: true }
+];
+
+function salaryMultiplier(multiplier) {
+  return emp => emp.salary * multiplier;
+}
+const bonusCalc = salaryMultiplier(1.1);
+const activeEmployees = employees.filter(e => e.active);
+
+const updated = activeEmployees.map(e => {
+  const { name, salary } = e;
+  return { name, salary: bonusCalc(e) };
+});
+
+const totalPayroll = updated.reduce((sum, e) => sum + e.salary, 100);
+
+console.log("Active:", activeEmployees);
+console.log("Updated:", updated);
+console.log("Total Payroll:", totalPayroll);
+console.log("--- Experiment Logs ---");
+console.log("1. forEach does not return a new array");
+console.log("2. Shallow copy still shares nested objects");
+console.log("3. Closures remember variables even after function ends");
+
